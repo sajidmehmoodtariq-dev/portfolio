@@ -2,7 +2,7 @@ import React from 'react'
 
 const Header = () => {
   return (
-    <header className='flex justify-center items-center relative top-3'>
+    <header className='flex justify-center items-center fixed top-3 w-full z-10'>
       <nav className='flex gap-1 p-0.5 border-white/15 rounded-full bg-white/10 backdrop-blur'>
         <a href="/" className='nav-item'>Home</a>
         <a href="/about" className='nav-item'>About</a>
