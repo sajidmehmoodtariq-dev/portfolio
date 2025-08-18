@@ -55,7 +55,7 @@ export const metadata = {
     description:
       "Official portfolio of Sajid Mehmood Tariq – Computer Science student, full-stack developer, and CS50 certified.",
     images: ["/logo.png"],
-    url: "https://github.com/sajidmehmoodtariq30",
+    url: "https://github.com/sajidmehmoodtariq-dev",
   },
 };
 
@@ -76,7 +76,7 @@ export default function RootLayout({ children }) {
               "image": "https://sajidmehmoodtariq.me/me.jpg",
               "sameAs": [
                 "https://www.linkedin.com/in/sajidmehmoodtariq",
-                "https://github.com/sajidmehmoodtariq30",
+                "https://github.com/sajidmehmoodtariq-dev",
                 "https://cs50.harvard.edu/certificates/f5aa59ca-26eb-4289-af0e-ccf00f4feb78" // replace with your real CS50 cert URL
               ],
               "jobTitle": "Full Stack Developer",
