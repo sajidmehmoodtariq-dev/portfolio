@@ -16,6 +16,6 @@
 
 @layer utilities {
   .container{
-    @apply lg:max-w-6xl lg:mx-auto;
+    @apply lg:max-w-6xl mx-auto;
   }
 }

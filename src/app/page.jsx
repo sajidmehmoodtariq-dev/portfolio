@@ -1,6 +1,7 @@
 import Header from "@/sections/Header"
 import Hero from "@/sections/Hero"
 import Projects from "@/sections/Projects"
+import Tape from "@/sections/Tape"
 
 
 const page = () => {
@@ -9,6 +10,7 @@ const page = () => {
       <Header />
       <Hero />
       <Projects />
+      <Tape />
     </>
   )
 }
