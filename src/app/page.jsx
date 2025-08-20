@@ -6,6 +6,8 @@ import Hero from "@/sections/Hero"
 import Projects from "@/sections/Projects"
 import Tape from "@/sections/Tape"
 import Testimonials from "@/sections/Testimonials"
+import Certifications from "@/sections/Certifications"
+import Achievements from "@/sections/Achievements"
 
 
 const page = () => {
@@ -17,6 +19,8 @@ const page = () => {
       <Tape />
       <Testimonials />
       <About />
+      <Certifications />
+      <Achievements />
       <Contact />
       <Footer />
     </>
