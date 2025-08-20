@@ -64,13 +64,13 @@ const Hero = () => {
           </div>
         </div>
         <div className='flex flex-col md:flex-row justify-center items-center mt-8 gap-4'>
-          <button className='inline-flex items-center gap-2 border border-white/15 px-6 h-12  rounded-xl'>
-            <span className='font-semibold'>Explore My Work</span>
+          <button className='inline-flex items-center z-50 gap-2 border hover:bg-white hover:text-gray-950 border-white/15 px-6 h-12  rounded-xl'>
+            <span className='font-semibold'><a href="/#projects">View My work</a></span>
             <ArrowDown className="size-4" />
           </button>
-          <button className='inline-flex items-center gap-2 border border-white bg-white text-gray-950 px-6 h-12 rounded-xl'>
+          <button className='inline-flex items-center z-50 hover:bg-gray-900 hover:text-white gap-2 border border-white bg-white text-gray-950 px-6 h-12 rounded-xl'>
             <span>👋</span>
-            <span>Let's Connect</span>
+            <span><a href="/contact">Let's Connect</a></span>
           </button>
         </div>
       </div>

@@ -52,7 +52,7 @@ const Projects = () => {
                     </div>
                   </div>
                   <div className="-mr-24">
-                    <Image src={project.image} className="mt-8 -mb-4 md:-mb-0" alt={project.title} />
+                    <Image src={project.image} className="mt-8 -mb-6 rounded-3xl" alt={project.title} />
                   </div>
                 </div>
               </Card>
