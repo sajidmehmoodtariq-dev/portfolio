@@ -12,9 +12,12 @@ const Projects = () => {
         <SectionHeader eyebrow="Real World Projects" title="Featured Projects" description="See how I transformed these projects into success stories. Each project showcases my skills in web development, design, and user experience. Click on the links to view the projects in action." />
         <div className="flex flex-col mt-10 gap-20 md:mt-20">
           {
-            // show only pinned (featured) projects on the main page
-            portfolioProjects.filter(p => p.pinned).slice(0,3).map((project) => (
-              <Card key={project.id || project.title} className="px-8 pt-8 md:pt-12 md:px-10 pb-0">
+            portfolioProjects.filter(p => p.pinned).slice(0,3).map((project,projectIndex) => (
+              <Card key={project.id || project.title} className="px-8 pt-8 md:pt-12 md:px-10 pb-0 sticky"
+              style={{
+                top: `calc(64px + ${projectIndex * 40}px`
+              }}
+              >
                 <div className="lg:grid lg:grid-cols-2 lg:gap-8">
                   <div>
                     <div className="bg-gradient-to-r from-emerald-400 gap-2 to-sky-400 inline-flex font-bold uppercase tracking-widest text-sm text-transparent bg-clip-text">
@@ -58,7 +61,7 @@ const Projects = () => {
         </div>
       </div>
       <div className="mt-16 text-center">
-        <p className="text-white/60">Want to see more of my work? Check out my <a href="/projects" className="text-emerald-400 hover:underline">Projects</a>.</p>
+        <p className="text-white">Want to see more of my work? Check out my <a href="/projects" className="underline hover:text-white/40">Projects</a>.</p>
       </div>
     </section>
   );
