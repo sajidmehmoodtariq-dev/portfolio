@@ -9,10 +9,27 @@ export async function GET(request, { params }) {
   try {
     await connectDB();
     
-    const blog = await Blog.findOne({ 
-      slug: params.slug,
-      published: true 
-    }).lean();
+    // Check if user is authenticated (for admin access to drafts)
+    const cookieStore = await cookies();
+    const token = cookieStore.get('owner-token')?.value;
+    let isAdmin = false;
+    
+    if (token) {
+      try {
+        jwt.verify(token, process.env.JWT_SECRET);
+        isAdmin = true;
+      } catch (err) {
+        // Invalid token, continue as public user
+      }
+    }
+    
+    // Build query - admin can see all blogs, public users only published
+    let query = { slug: params.slug };
+    if (!isAdmin) {
+      query.published = true;
+    }
+    
+    const blog = await Blog.findOne(query).lean();
     
     if (!blog) {
       return NextResponse.json(

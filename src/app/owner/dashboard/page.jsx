@@ -14,6 +14,7 @@ const DashboardPage = () => {
   const [blogsLoading, setBlogsLoading] = useState(false);
   const [editingBlog, setEditingBlog] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loadingFullBlog, setLoadingFullBlog] = useState(false);
 
   const router = useRouter();
 
@@ -151,6 +152,26 @@ const DashboardPage = () => {
     } catch (error) {
       console.error('Delete blog error:', error);
       alert('Failed to delete blog. Please try again.');
+    }
+  };
+
+  const handleEditClick = async (blog) => {
+    setLoadingFullBlog(true);
+    try {
+      // Fetch the full blog content including the content field
+      const response = await fetch(`/api/blogs/${blog.slug}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setEditingBlog(data.data.blog);
+      } else {
+        alert(`Error fetching blog: ${data.message}`);
+      }
+    } catch (error) {
+      console.error('Error fetching full blog:', error);
+      alert('Failed to load blog for editing. Please try again.');
+    } finally {
+      setLoadingFullBlog(false);
     }
   };
 
@@ -342,8 +363,9 @@ const DashboardPage = () => {
                               </svg>
                             </a>
                             <button
-                              onClick={() => setEditingBlog(blog)}
-                              className="p-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-300"
+                              onClick={() => handleEditClick(blog)}
+                              disabled={loadingFullBlog}
+                              className="p-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                               title="Edit Post"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

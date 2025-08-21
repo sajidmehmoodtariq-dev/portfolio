@@ -59,13 +59,6 @@ const blogSchema = new mongoose.Schema({
 
 // Create slug from title before saving
 blogSchema.pre('save', function(next) {
-  console.log('Pre-save hook triggered:', {
-    isNew: this.isNew,
-    hasSlug: !!this.slug,
-    title: this.title,
-    isModified: this.isModified('title')
-  });
-  
   // Always generate slug if it doesn't exist or title changed
   if (!this.slug || this.isModified('title') || this.isNew) {
     // Generate base slug
@@ -85,11 +78,7 @@ blogSchema.pre('save', function(next) {
     // We'll handle proper uniqueness in the route if needed
     const timestamp = Date.now().toString().slice(-6);
     this.slug = `${baseSlug}-${timestamp}`;
-    
-    console.log('Generated slug:', this.slug);
   }
-  
-  console.log('Final slug before save:', this.slug);
   next();
 });
 
