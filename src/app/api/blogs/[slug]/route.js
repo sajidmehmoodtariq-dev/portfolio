@@ -37,7 +37,7 @@ export async function GET(request, { params }) {
 // PUT /api/blogs/[slug] - Update blog by slug (protected)
 export async function PUT(request, { params }) {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('owner-token')?.value;
     
     if (!token) {
@@ -59,7 +59,7 @@ export async function PUT(request, { params }) {
     await connectDB();
     
     const body = await request.json();
-    const { title, content, excerpt, tags, featured, published } = body;
+    const { title, content, excerpt, tags, featured, published, imageUrl } = body;
     
     const blog = await Blog.findOne({ slug: params.slug });
     
@@ -77,6 +77,7 @@ export async function PUT(request, { params }) {
     if (tags !== undefined) blog.tags = tags;
     if (featured !== undefined) blog.featured = featured;
     if (published !== undefined) blog.published = published;
+    if (imageUrl !== undefined) blog.imageUrl = imageUrl;
     
     await blog.save();
     
@@ -98,7 +99,7 @@ export async function PUT(request, { params }) {
 // DELETE /api/blogs/[slug] - Delete blog by slug (protected)
 export async function DELETE(request, { params }) {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('owner-token')?.value;
     
     if (!token) {

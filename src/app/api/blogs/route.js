@@ -59,7 +59,7 @@ export async function GET(request) {
 // POST /api/blogs - Create a new blog (protected)
 export async function POST(request) {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('owner-token')?.value;
     
     if (!token) {
@@ -77,11 +77,10 @@ export async function POST(request) {
         { status: 401 }
       );
     }
-    
     await connectDB();
     
     const body = await request.json();
-    const { title, content, excerpt, tags, featured, published } = body;
+    const { title, content, excerpt, tags, featured, published, imageUrl } = body;
     
     if (!title || !content || !excerpt) {
       return NextResponse.json(
@@ -90,13 +89,32 @@ export async function POST(request) {
       );
     }
     
+    // Generate slug manually as backup
+    const generateSlug = (title) => {
+      let baseSlug = title
+        .toLowerCase()
+        .replace(/[^a-zA-Z0-9\s]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .trim();
+      
+      if (!baseSlug) {
+        baseSlug = 'untitled-blog';
+      }
+      
+      const timestamp = Date.now().toString().slice(-6);
+      return `${baseSlug}-${timestamp}`;
+    };
+    
     const blog = new Blog({
       title,
       content,
       excerpt,
+      slug: generateSlug(title), // Set slug explicitly
       tags: tags || [],
       featured: featured || false,
-      published: published !== undefined ? published : true
+      published: published !== undefined ? published : true,
+      imageUrl: imageUrl || null
     });
     
     await blog.save();

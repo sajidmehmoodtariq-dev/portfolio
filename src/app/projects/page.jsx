@@ -484,6 +484,19 @@ const ProjectCard = ({ project, index, categoryConfig }) => {
           )}
         </div>
         
+        {/* Project Image */}
+        {project.image && (
+          <div className="mb-4 overflow-hidden rounded-2xl">
+            <Image 
+              src={project.image} 
+              alt={project.title || project.name}
+              width={300}
+              height={180}
+              className="w-full h-36 object-cover hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+        )}
+        
         <h3 className="font-serif text-xl mb-3">{project.title || project.name}</h3>
         <p className="text-white/70 text-sm mb-4 flex-1">
           {project.results?.[0]?.title || project.description}

@@ -10,7 +10,8 @@ const BlogForm = ({ initialData = {}, onSubmit, isLoading = false, submitText = 
     content: initialData.content || '',
     tags: initialData.tags?.join(', ') || '',
     featured: initialData.featured || false,
-    published: initialData.published !== undefined ? initialData.published : true
+    published: initialData.published !== undefined ? initialData.published : true,
+    imageUrl: initialData.imageUrl || ''
   });
 
   const [errors, setErrors] = useState({});
@@ -126,6 +127,38 @@ const BlogForm = ({ initialData = {}, onSubmit, isLoading = false, submitText = 
             className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-emerald-300 transition-colors duration-300"
             placeholder="react, javascript, web development"
           />
+        </div>
+
+        {/* Image URL */}
+        <div>
+          <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-300 mb-2">
+            Featured Image URL <span className="text-gray-500">(optional)</span>
+          </label>
+          <input
+            type="url"
+            id="imageUrl"
+            name="imageUrl"
+            value={formData.imageUrl}
+            onChange={handleChange}
+            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-emerald-300 transition-colors duration-300"
+            placeholder="https://example.com/image.jpg"
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            Enter a URL for the blog post's featured image. Leave empty if no image is needed.
+          </p>
+          {formData.imageUrl && (
+            <div className="mt-3">
+              <p className="text-sm text-gray-300 mb-2">Preview:</p>
+              <img 
+                src={formData.imageUrl} 
+                alt="Featured image preview" 
+                className="w-32 h-20 object-cover rounded-lg border border-gray-600"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+            </div>
+          )}
         </div>
 
         {/* Content */}

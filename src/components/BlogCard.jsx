@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 const BlogCard = ({ blog, index = 0 }) => {
@@ -35,6 +36,18 @@ const BlogCard = ({ blog, index = 0 }) => {
           </span>
         ))}
       </div>
+      
+      {blog.imageUrl && (
+        <div className="mb-6 overflow-hidden rounded-2xl">
+          <Image 
+            src={blog.imageUrl} 
+            alt={blog.title}
+            width={400}
+            height={200}
+            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+      )}
       
       <h2 className="text-2xl font-bold text-white mb-4 group-hover:text-emerald-300 transition-colors duration-300">
         <Link href={`/blogs/${blog.slug}`}>

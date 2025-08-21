@@ -1,0 +1,2 @@
+# Ignore blog assets folder - images will be served via GitHub raw URLs
+blog-assets/

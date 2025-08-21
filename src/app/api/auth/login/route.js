@@ -57,8 +57,8 @@ export async function POST(request) {
     );
     
     // Set httpOnly cookie
-    const cookieStore = cookies();
-    await cookieStore.set('owner-token', token, {
+    const cookieStore = await cookies();
+    cookieStore.set('owner-token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
