@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Header from '@/sections/Header'
 import portfolioProjects from '@/data/projects'
+import githubRepos from '@/data/github-repos'
+import githubStats from '@/data/github-stats'
 import Card from '@/components/Card'
 import Image from 'next/image'
 import ArrowUprightIcon from '@/assets/icons/arrow-up-right.svg'
@@ -169,43 +171,19 @@ const categorizeProject = (repo) => {
 }
 
 const ProjectsPage = () => {
-  const [allProjects, setAllProjects] = useState([...portfolioProjects, ...githubProjects])
-  const [githubStats, setGithubStats] = useState(null)
+  const [allProjects, setAllProjects] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState('All')
 
   useEffect(() => {
-    const fetchGitHubProjects = async () => {
+    const loadProjects = async () => {
       try {
-        // Fetch all repositories from GitHub
-        const reposResponse = await fetch('https://api.github.com/users/sajidmehmoodtariq-dev/repos?per_page=100&sort=updated')
-        const reposData = await reposResponse.json()
+        // Combine curated projects with GitHub projects from local data
+        const visibleGithubRepos = githubRepos.filter(repo => repo.show)
         
-        // Process GitHub repos and add show boolean
-        const processedGithubProjects = reposData.map((repo) => ({
-          id: repo.id,
-          name: repo.name,
-          description: repo.description || 'No description available',
-          language: repo.language,
-          category: categorizeProject(repo),
-          stars: repo.stargazers_count,
-          forks: repo.forks_count,
-          updated_at: repo.updated_at,
-          html_url: repo.html_url,
-          homepage: repo.homepage,
-          topics: repo.topics || [],
-          // Show logic - you can customize this
-          show: !repo.fork && // Hide forked repos
-                repo.name !== 'sajidmehmoodtariq-dev' && // Hide profile repo
-                !repo.name.toLowerCase().includes('config') && // Hide config repos
-                repo.stargazers_count >= 0, // Show all repos (adjust threshold as needed)
-          isGithubProject: true
-        }))
-        
-        // Combine curated projects with GitHub projects
         const combinedProjects = [
-          ...portfolioProjects.map(p => ({...p, show: true, isGithubProject: false})),
-          ...processedGithubProjects
+          ...portfolioProjects.map(p => ({ ...p, show: true, isGithubProject: false })),
+          ...visibleGithubRepos.map(repo => ({ ...repo, isGithubProject: true }))
         ]
         
         // Remove duplicates based on name/title matching
@@ -226,21 +204,16 @@ const ProjectsPage = () => {
         })
         
         setAllProjects(uniqueProjects)
-        setGithubStats({
-          totalRepos: reposData.length,
-          totalStars: reposData.reduce((sum, repo) => sum + repo.stargazers_count, 0),
-          languages: [...new Set(reposData.map(repo => repo.language).filter(Boolean))]
-        })
         
       } catch (error) {
-        console.log('Using static project data')
-        setAllProjects([...portfolioProjects.map(p => ({...p, show: true, isGithubProject: false}))])
+        console.error('Error loading projects:', error)
+        setAllProjects([...portfolioProjects.map(p => ({ ...p, show: true, isGithubProject: false }))])
       } finally {
         setLoading(false)
       }
     }
     
-    fetchGitHubProjects()
+    loadProjects()
   }, [])
 
   // Filter projects based on show boolean and selected category
@@ -309,7 +282,7 @@ const ProjectsPage = () => {
             <Card className="p-6 text-center">
               <div className="text-3xl mb-2">🔧</div>
               <div className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
-                {githubStats.languages.length}
+                {Array.isArray(githubStats.languages) ? githubStats.languages.length : 0}
               </div>
               <div className="text-sm text-white/60">Languages Used</div>
             </Card>

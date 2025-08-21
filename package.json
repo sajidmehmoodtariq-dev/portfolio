@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed:owner": "node scripts/seed-owner.js"
+    "seed:github-stats": "node scripts/seed-github-stats.js",
+    "update:repos": "node scripts/fetch-github-repos.js"
   },
   "dependencies": {
     "@svgr/webpack": "^8.1.0",
@@ -19,6 +20,7 @@
     "mongoose": "^8.17.2",
     "next": "15.4.6",
     "next-sitemap": "^4.2.3",
+    "nodemailer": "^7.0.5",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "tailwind-merge": "^3.3.1"

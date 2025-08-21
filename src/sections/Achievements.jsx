@@ -25,22 +25,22 @@ export default function Achievements() {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetch(`/api/github-stats?login=sajidmehmoodtariq-dev`, { cache: 'no-store' });
+        const res = await fetch(`/api/github-stats`, { cache: 'no-store' });
         const data = await res.json();
         if (data.error) throw new Error(data.error);
 
         setAchievements([
           {
             title: "Public Repositories",
-            value: `${data.repos}`,
+            value: `${data.totalRepos}`,
             description: "Open-source projects and repositories",
             icon: "💻",
             gradient: "from-emerald-400 to-sky-400"
           },
           {
-            title: "YTD Commits",
-            value: `${data.commits}`,
-            description: "Commits made this year",
+            title: "YTD Contributions",
+            value: `${data.contributionsThisYear}`,
+            description: "Contributions made this year",
             icon: "🔥",
             gradient: "from-blue-400 to-cyan-400"
           },
@@ -52,15 +52,16 @@ export default function Achievements() {
             gradient: "from-purple-400 to-pink-400"
           },
           {
-            title: "Total Contributions",
-            value: `${data.totalContributions}`,
-            description: "Contributions in the last year",
-            icon: "🔧",
+            title: "Total Stars",
+            value: `${data.totalStars}`,
+            description: "Stars earned across repositories",
+            icon: "🌟",
             gradient: "from-orange-400 to-red-400"
           }
         ]);
       } catch (e) {
         console.error("Stats error:", e);
+        // Keep fallback data on error
       } finally {
         setLoading(false);
       }

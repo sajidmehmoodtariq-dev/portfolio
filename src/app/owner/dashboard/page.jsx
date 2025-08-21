@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import BlogForm from '@/components/BlogForm';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import GitHubStatsForm from '@/components/GitHubStatsForm';
 
 const DashboardPage = () => {
   const [user, setUser] = useState(null);
@@ -15,6 +16,8 @@ const DashboardPage = () => {
   const [editingBlog, setEditingBlog] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadingFullBlog, setLoadingFullBlog] = useState(false);
+  const [githubStats, setGithubStats] = useState(null);
+  const [githubStatsLoading, setGithubStatsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -250,6 +253,16 @@ const DashboardPage = () => {
             >
               Manage Blogs
             </button>
+            <button
+              onClick={() => {setActiveTab('github-stats'); setEditingBlog(null);}}
+              className={`px-6 py-3 font-medium transition-colors duration-300 ${
+                activeTab === 'github-stats'
+                  ? 'text-emerald-300 border-b-2 border-emerald-300'
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              GitHub Stats
+            </button>
           </div>
         </div>
 
@@ -388,6 +401,18 @@ const DashboardPage = () => {
                   )}
                 </div>
               )}
+            </div>
+          )}
+
+          {activeTab === 'github-stats' && !editingBlog && (
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-white">GitHub Stats Management</h2>
+                <div className="text-sm text-gray-400">
+                  Update your GitHub statistics weekly for accurate portfolio data
+                </div>
+              </div>
+              <GitHubStatsForm />
             </div>
           )}
         </motion.div>

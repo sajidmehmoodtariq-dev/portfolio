@@ -1,77 +1,62 @@
 import { NextResponse } from "next/server";
+import connectDB from "@/lib/mongodb";
+import GitHubStats from "@/models/GitHubStats";
 
 export async function GET(req) {
-  const { searchParams } = new URL(req.url);
-  const username = searchParams.get("login");
-
   try {
-    // Fetch contributions from GitHub GraphQL API
-    const response = await fetch("https://api.github.com/graphql", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
-        "Content-Type": "application/json",
+    await connectDB();
+
+    // Get the active GitHub stats from database
+    const stats = await GitHubStats.findOne({ isActive: true });
+
+    if (!stats) {
+      return NextResponse.json(
+        { error: "GitHub stats not found. Please seed the database first." },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(stats);
+  } catch (error) {
+    console.error("Database error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch GitHub stats from database" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(req) {
+  try {
+    await connectDB();
+
+    const statsData = await req.json();
+
+    // Find and update the active stats, or create new one
+    const updatedStats = await GitHubStats.findOneAndUpdate(
+      { isActive: true },
+      {
+        ...statsData,
+        isActive: true,
+        lastUpdated: new Date()
       },
-      body: JSON.stringify({
-        query: `
-          query($username:String!) {
-            user(login: $username) {
-              contributionsCollection {
-                contributionCalendar {
-                  weeks {
-                    contributionDays {
-                      contributionCount
-                      date
-                    }
-                  }
-                }
-              }
-            }
-          }
-        `,
-        variables: { username },
-      }),
-    });
-
-    const { data } = await response.json();
-
-    const weeks = data?.user?.contributionsCollection?.contributionCalendar?.weeks || [];
-    const days = weeks.flatMap((week) => week.contributionDays);
-
-    let currentStreak = 0;
-    let longestStreak = 0;
-    let totalContributions = 0;
-
-    let streak = 0;
-    for (let i = 0; i < days.length; i++) {
-      if (days[i].contributionCount > 0) {
-        streak++;
-        if (streak > longestStreak) longestStreak = streak;
-      } else {
-        streak = 0;
+      {
+        new: true,
+        upsert: true,
+        runValidators: true
       }
-    }
-
-    // Current streak (last continuous contribution days until today)
-    for (let i = days.length - 1; i >= 0; i--) {
-      if (days[i].contributionCount > 0) {
-        currentStreak++;
-      } else {
-        break;
-      }
-    }
-
-    // Total contributions this year
-    totalContributions = days.reduce((sum, d) => sum + d.contributionCount, 0);
+    );
 
     return NextResponse.json({
-      repos: 57, // you can fetch repos separately
-      commits: 559, // approximate commits (or fetch via API)
-      totalContributions,
-      currentStreak,
-      longestStreak,
+      success: true,
+      message: "GitHub stats updated successfully",
+      data: updatedStats
     });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("Database error:", error);
+    return NextResponse.json(
+      { error: "Failed to update GitHub stats in database" },
+      { status: 500 }
+    );
   }
 }
