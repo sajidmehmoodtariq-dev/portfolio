@@ -7,7 +7,7 @@ import Owner from '@/models/Owner';
 export async function GET() {
   try {
     const cookieStore = cookies();
-    const token = cookieStore.get('owner-token')?.value;
+    const token = await cookieStore.get('owner-token')?.value;
     
     if (!token) {
       return NextResponse.json(

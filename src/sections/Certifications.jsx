@@ -40,6 +40,22 @@ const certifications = [
             "TailwindCSS & Bootstrap"
         ],
         verified: true
+    },
+    {
+        title: "Fellowship",
+        issuer: "Fluxxion",
+        date: "2025",
+        certificateUrl: "https://sajidmehmoodtariq.me/fluxxion.png",
+        description: "Fluxxion's 2-Months program to give hand's on experience in MERN.",
+        skills: [
+            "MONGO",
+            "Express",
+            "React",
+            "NodeJS",
+            "TailwindCSS",
+            "NextJs",
+        ],
+        verified: true
     }
 ]
 
