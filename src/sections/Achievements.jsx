@@ -15,13 +15,12 @@ const fallbackAchievements = [
   { title: "Public Repositories", value: "—", description: "Open-source projects and repositories", icon: "💻", gradient: "from-emerald-400 to-sky-400" },
   { title: "YTD Commits", value: "—", description: "Commits made this year", icon: "🔥", gradient: "from-blue-400 to-cyan-400" },
   { title: "Current Streak", value: "—", description: "Consecutive days with contributions", icon: "⏱️", gradient: "from-purple-400 to-pink-400" },
-  { title: "Languages Used", value: "—", description: "Unique primary languages across repos", icon: "🔧", gradient: "from-orange-400 to-red-400" }
+  { title: "Total Contributions", value: "—", description: "Contributions in the last year", icon: "🔧", gradient: "from-orange-400 to-red-400" }
 ];
 
 export default function Achievements() {
   const [achievements, setAchievements] = useState(fallbackAchievements);
   const [loading, setLoading] = useState(true);
-  const [meta, setMeta] = useState(null);
 
   useEffect(() => {
     const load = async () => {
@@ -33,14 +32,14 @@ export default function Achievements() {
         setAchievements([
           {
             title: "Public Repositories",
-            value: `${data.repoCount}`,
+            value: `${data.repos}`,
             description: "Open-source projects and repositories",
             icon: "💻",
             gradient: "from-emerald-400 to-sky-400"
           },
           {
             title: "YTD Commits",
-            value: `${data.ytd.commits}`,
+            value: `${data.commits}`,
             description: "Commits made this year",
             icon: "🔥",
             gradient: "from-blue-400 to-cyan-400"
@@ -48,26 +47,18 @@ export default function Achievements() {
           {
             title: "Current Streak",
             value: `${data.currentStreak} days`,
-            description: `Longest streak: ${data.longestStreak} days`,
+            description: "Consecutive days with contributions",
             icon: "⏱️",
             gradient: "from-purple-400 to-pink-400"
           },
           {
-            title: "Languages Used",
-            value: `${data.languagesCount}+`,
-            description: "Unique primary languages across repos",
+            title: "Total Contributions",
+            value: `${data.totalContributions}`,
+            description: "Contributions in the last year",
             icon: "🔧",
             gradient: "from-orange-400 to-red-400"
           }
         ]);
-
-        setMeta({
-          lastYearTotal: data.lastYear.totalContributions,
-          ytdPRs: data.ytd.prs,
-          ytdIssues: data.ytd.issues,
-          languages: data.languages?.slice(0, 6) || [],
-          fetchedAt: data.fetchedAt
-        });
       } catch (e) {
         console.error("Stats error:", e);
       } finally {
@@ -119,31 +110,6 @@ export default function Achievements() {
               </motion.div>
             ))}
           </div>
-
-          {/* Extra meta row (optional, looks nice) */}
-          {meta && (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="mb-12 text-center text-sm text-white/70"
-            >
-              <div className="flex flex-wrap items-center justify-center gap-3">
-                <span>Last 365 days contributions: <strong className="text-white">{meta.lastYearTotal}</strong></span>
-                <span>•</span>
-                <span>YTD PRs: <strong className="text-white">{meta.ytdPRs}</strong></span>
-                <span>•</span>
-                <span>YTD Issues: <strong className="text-white">{meta.ytdIssues}</strong></span>
-                {meta.languages.length > 0 && (
-                  <>
-                    <span>•</span>
-                    <span>Top languages: <strong className="text-white">{meta.languages.join(", ")}</strong></span>
-                  </>
-                )}
-              </div>
-            </motion.div>
-          )}
 
           {/* Milestones */}
           <div className="space-y-6">

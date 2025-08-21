@@ -10,7 +10,7 @@ const certifications = [
     {
         title: "CS50x: Introduction to Computer Science",
         issuer: "Harvard University",
-        date: "2024",
+        date: "2025",
         certificateUrl: "https://cs50.harvard.edu/certificates/f5aa59ca-26eb-4289-af0e-ccf00f4feb78",
         description: "Harvard University's introduction to the intellectual enterprises of computer science and the art of programming.",
         skills: [
@@ -21,6 +21,23 @@ const certifications = [
             "Python Programming",
             "SQL & Databases",
             "Web Development"
+        ],
+        verified: true
+    },
+    {
+        title: "Web Development",
+        issuer: "Punjab University",
+        date: "2024",
+        certificateUrl: "https://sajidmehmoodtariq.me/EROZGAAR.jpg",
+        description: "Punjab University's introduction to the Web Development using programming as well as wordpress.",
+        skills: [
+            "Wordpress",
+            "SQL",
+            "PHP",
+            "HTML",
+            "CSS",
+            "JS",
+            "TailwindCSS & Bootstrap"
         ],
         verified: true
     }

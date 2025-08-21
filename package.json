@@ -6,11 +6,17 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed:owner": "node scripts/seed-owner.js"
   },
   "dependencies": {
     "@svgr/webpack": "^8.1.0",
+    "bcryptjs": "^3.0.2",
+    "cookie": "^1.0.2",
+    "dotenv": "^17.2.1",
     "framer-motion": "^12.23.12",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.17.2",
     "next": "15.4.6",
     "next-sitemap": "^4.2.3",
     "react": "19.1.0",

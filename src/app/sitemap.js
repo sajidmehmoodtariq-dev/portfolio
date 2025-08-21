@@ -1,16 +1,44 @@
-export default function sitemap() {
-  return [
+import connectDB from '@/lib/mongodb';
+import Blog from '@/models/Blog';
+
+export default async function sitemap() {
+  const baseUrl = 'https://sajidmehmoodtariq.me';
+
+  // Static routes
+  const staticRoutes = [
     {
-      url: "https://sajidmehmoodtariq.me",
+      url: baseUrl,
       lastModified: new Date(),
+      priority: 1.0,
     },
     {
-      url: "https://sajidmehmoodtariq.me/projects",
+      url: `${baseUrl}/projects`,
       lastModified: new Date(),
+      priority: 0.8,
     },
     {
-      url: "https://sajidmehmoodtariq.me/blog",
+      url: `${baseUrl}/blogs`,
       lastModified: new Date(),
+      priority: 0.8,
     },
   ];
+
+  // Dynamic blog routes
+  let blogRoutes = [];
+  try {
+    await connectDB();
+    const blogs = await Blog.find({ published: true })
+      .select('slug updatedAt')
+      .lean();
+
+    blogRoutes = blogs.map((blog) => ({
+      url: `${baseUrl}/blogs/${blog.slug}`,
+      lastModified: blog.updatedAt ? new Date(blog.updatedAt) : new Date(),
+      priority: 0.6,
+    }));
+  } catch (error) {
+    console.error('❌ Sitemap error (blogs):', error);
+  }
+
+  return [...staticRoutes, ...blogRoutes];
 }

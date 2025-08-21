@@ -8,7 +8,7 @@ const Header = () => {
         <a href="/#projects" className='nav-item'>Projects</a>
         <a href="/#testimonials" className='nav-item'>Testimonials</a>
         <a href="/#about" className='nav-item'>About</a>
-        <a href="/#blog" className='nav-item'>Blog</a>
+        <a href="/blogs" className='nav-item'>Blog</a>
         <a href="/#contact" className='nav-item bg-white text-gray-900 hover:bg-white/70 hover:text-gray-900'>Contact</a>
       </nav>
     </header>
