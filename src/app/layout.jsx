@@ -1,5 +1,6 @@
 import { Inter, Roboto } from "next/font/google";
 import "./globals.css";
+import ThemeToggle from '@/components/ThemeToggle';
 
 const inter = Inter({
   variable: "--font-sans",
@@ -63,7 +64,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -77,7 +78,7 @@ export default function RootLayout({ children }) {
               "sameAs": [
                 "https://www.linkedin.com/in/sajidmehmoodtariq",
                 "https://github.com/sajidmehmoodtariq-dev",
-                "https://cs50.harvard.edu/certificates/f5aa59ca-26eb-4289-af0e-ccf00f4feb78" // replace with your real CS50 cert URL
+                "https://cs50.harvard.edu/certificates/f5aa59ca-26eb-4289-af0e-ccf00f4feb78"
               ],
               "jobTitle": "Full Stack Developer",
               "worksFor": {
@@ -91,11 +92,13 @@ export default function RootLayout({ children }) {
             }),
           }}
         />
-
       </head>
       <body
-        className={`${inter.variable} ${roboto.variable} antialiased bg-gray-900 text-white font-sans`}
+        className={`${inter.variable} ${roboto.variable} antialiased font-sans min-h-screen transition-colors duration-300`}
       >
+        <div className="fixed top-4 right-4 z-50">
+          <ThemeToggle />
+        </div>
         {children}
       </body>
     </html>
