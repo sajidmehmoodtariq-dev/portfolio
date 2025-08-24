@@ -1,3 +1,4 @@
+"use client";
 import { cookies } from 'next/headers';
 
 // Dynamic metadata for SEO
@@ -39,7 +40,6 @@ export async function generateMetadata({ params }) {
     },
   };
 }
-"use client";
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';

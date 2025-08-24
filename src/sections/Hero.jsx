@@ -61,6 +61,7 @@ const Hero = () => {
           <div className='max-w-lg mx-auto'>
             <h1 className='font-serif text-3xl md:text-5xl text-center mt-8 tracking-wide'>Sajid Mehmood Tariq</h1>
             <p className='mt-4 text-center md:text-lg text-white/60'>Building Exceptional User Experience. I specialize in transforming designs into functional, high-performing web applications.</p>
+            <p className='mt-2 text-center text-white/70 text-base md:text-lg'>I’m passionate about crafting robust, scalable solutions that solve real problems—always with a focus on performance, security, and the end user.</p>
           </div>
         </div>
         <div className='flex flex-col md:flex-row justify-center items-center mt-8 gap-4'>

@@ -107,11 +107,14 @@ const hobbies = [
 
 const About = () => {
     const constraintRef = useRef(null);
-    return (
-        <div id='about' className='py-20'>
-            <div className='container'>
-                <SectionHeader eyebrow="About" title="A Glimpse into my World" description="Learn more about who I am, what I do, and what inspires me." />
-                <div className='mt-20 flex flex-col gap-8'>
+        return (
+                <div id='about' className='py-20'>
+                        <div className='container'>
+                                <SectionHeader eyebrow="About" title="A Glimpse into my World" description="Learn more about who I am, what I do, and what inspires me." />
+                                <p className="text-white/80 text-lg mt-8 max-w-3xl mx-auto text-center">
+                                    I have hands-on experience deploying projects on both <b>Vercel</b> and <b>Ubuntu VPS</b>, including configuring domains, SSL, and server environments. My journey into server management even led me to learn about whitelisting and blocking IPs—something I picked up while running a Minecraft server on Ubuntu! I’m also proud to have achieved a <b>100% SEO score</b> for this portfolio, and I regularly tackle technical challenges like CORS, authentication, and other backend/frontend hurdles that come with building and shipping real-world apps.
+                                </p>
+                                <div className='mt-20 flex flex-col gap-8'>
                     <div className='md:grid md:grid-cols-5 lg:grid-cols-3 md:gap-8'>
                         <Card className="h-[320px] md:col-span-2 lg:col-span-1">
                             <CardHeader title="My Reads" description="Explore the books shaping my prespectives" />

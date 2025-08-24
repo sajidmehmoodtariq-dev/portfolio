@@ -2,11 +2,24 @@ import darkSaasLandingPage from '@/assets/images/dark-saas-landing-page.png'
 import lightSaasLandingPage from '@/assets/images/light-saas-landing-page.png'
 import aiStartupLandingPage from '@/assets/images/ai-startup-landing-page.png'
 import bookCover from '@/assets/images/book-cover.png'
-import map from '@/assets/images/map.png'
-import memojiComputer from '@/assets/images/memoji-computer.png'
-import memojiSmile from '@/assets/images/memoji-smile.png'
 
 const portfolioProjects = [
+  {
+    id: 'feedback-anonymous',
+    company: 'Personal',
+    year: '2025',
+    title: 'Anonymous Feedback Web App',
+    category: 'Next.js',
+    results: [
+      { title: 'Allows users to send anonymous mentions and get honest feedback' },
+      { title: 'Built with Next.js and deployed on Vercel' },
+      { title: 'Helps creators and professionals receive true responses easily' }
+    ],
+    link: 'https://feedback-five-topaz.vercel.app/send-message/sajidmehmood',
+    github: 'https://github.com/sajidmehmoodtariq-dev/feedback-next',
+    image: bookCover, // Placeholder, update with a relevant image if available
+    pinned: false,
+  },
   {
     id: 'job-portal',
     company: 'Commercial Electricians Australia',
