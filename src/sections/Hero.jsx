@@ -52,16 +52,16 @@ const Hero = () => {
       <div className="">
         <div className='flex flex-col items-center justify-center'>
           <Image src={memojiImage} className='size-[100px]' alt="Person peaking from behind the laptop" />
-          <div className='bg-gray-950 border-gray-800 px-4 py-1.5 inline-flex items-center gap-4 rounded-lg'>
+          <div className='bg-gray-100 border border-gray-300 px-4 py-1.5 inline-flex items-center gap-4 rounded-lg transition-colors duration-500'>
             <div className='bg-green-500 size-2.5 rounded-full relative'>
               <div className='absolute inset-0 size-2.5 bg-green-500 rounded-full animate-ping'></div>
             </div>
-            <div className='text-sm font-medium'>Available for new Projects</div>
+            <div className='text-sm font-medium text-gray-900 transition-colors duration-500'>Available for new Projects</div>
           </div>
           <div className='max-w-lg mx-auto'>
-            <h1 className='font-serif text-3xl md:text-5xl text-center mt-8 tracking-wide'>Sajid Mehmood Tariq</h1>
-            <p className='mt-4 text-center md:text-lg text-white/60'>Building Exceptional User Experience. I specialize in transforming designs into functional, high-performing web applications.</p>
-            <p className='mt-2 text-center text-white/70 text-base md:text-lg'>I’m passionate about crafting robust, scalable solutions that solve real problems—always with a focus on performance, security, and the end user.</p>
+            <h1 className='font-serif text-3xl md:text-5xl text-center mt-8 tracking-wide text-gray-900 transition-colors duration-500'>Sajid Mehmood Tariq</h1>
+            <p className='mt-4 text-center md:text-lg text-gray-700 transition-colors duration-500'>Building Exceptional User Experience. I specialize in transforming designs into functional, high-performing web applications.</p>
+            <p className='mt-2 text-center text-gray-600 text-base md:text-lg transition-colors duration-500'>I’m passionate about crafting robust, scalable solutions that solve real problems—always with a focus on performance, security, and the end user.</p>
           </div>
         </div>
         <div className='flex flex-col md:flex-row justify-center items-center mt-8 gap-4'>

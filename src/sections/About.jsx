@@ -111,7 +111,7 @@ const About = () => {
                 <div id='about' className='py-20'>
                         <div className='container'>
                                 <SectionHeader eyebrow="About" title="A Glimpse into my World" description="Learn more about who I am, what I do, and what inspires me." />
-                                <p className="text-white/80 text-lg mt-8 max-w-3xl mx-auto text-center">
+                                <p className="text-gray-700 text-lg mt-8 max-w-3xl mx-auto text-center transition-colors duration-500">
                                     I have hands-on experience deploying projects on both <b>Vercel</b> and <b>Ubuntu VPS</b>, including configuring domains, SSL, and server environments. My journey into server management even led me to learn about whitelisting and blocking IPs—something I picked up while running a Minecraft server on Ubuntu! I’m also proud to have achieved a <b>100% SEO score</b> for this portfolio, and I regularly tackle technical challenges like CORS, authentication, and other backend/frontend hurdles that come with building and shipping real-world apps.
                                 </p>
                                 <div className='mt-20 flex flex-col gap-8'>
@@ -137,7 +137,7 @@ const About = () => {
                             <div className='relative flex-1' ref={constraintRef}>
                                 {
                                     hobbies.map(hobby => (
-                                        <motion.div key={hobby.title} className='inline-flex gap-2 px-6 bg-gradient-to-r items-center from-emerald-300 to-sky-400 rounded-full py-1.5 absolute'
+                                        <motion.div key={hobby.title} className='inline-flex gap-2 px-6 bg-gradient-to-r items-center from-emerald-300 to-sky-400 rounded-full py-1.5 absolute text-gray-900'
                                             style={{
                                                 left: hobby.left,
                                                 top: hobby.top
@@ -145,7 +145,7 @@ const About = () => {
                                             drag
                                             dragConstraints={constraintRef}
                                             >
-                                            <span className='font-me text-gray-950'>{hobby.title}</span>
+                                            <span className='font-me'>{hobby.title}</span>
                                             <span>{hobby.emoji}</span>
                                         </motion.div>
                                     ))
@@ -155,7 +155,7 @@ const About = () => {
                         </Card>
                         <Card className="h-[320px] p-0 relative md:col-span-2 lg:col-span-1">
                             <Image src={MapImage} alt='map' className='h-full w-full object- object-left-top' />
-                            <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-20 rounded-full  after:content-[""] after:absolute after:inset-0 after:outline-2 after:aoutline-offset-2 after:rounded-full after:outline-gray-950/30'>
+                            <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-20 rounded-full  after:content-[""] after:absolute after:inset-0 after:outline-2 after:aoutline-offset-2 after:rounded-full after:outline-gray-400/30'>
                                 <div className='absolute inset-0 rounded-full  bg-gradient-to-r from-emerald-300 to-sky-400 -z-10'></div>
                                 <div className='absolute inset-0 rounded-full  bg-gradient-to-r from-emerald-300 to-sky-400 -z-20 animate-ping [animation-duration:2s]'></div>
                                 <Image src={SmileImage} alt='smile' className='size-20' />

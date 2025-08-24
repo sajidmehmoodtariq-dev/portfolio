@@ -101,7 +101,7 @@ const BlogsPage = () => {
   }
 
   return (
-    <div className="py-24 bg-gray-900">
+    <div className="py-24 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div

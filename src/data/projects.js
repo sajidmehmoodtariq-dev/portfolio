@@ -18,7 +18,7 @@ const portfolioProjects = [
     link: 'https://feedback-five-topaz.vercel.app/send-message/sajidmehmood',
     github: 'https://github.com/sajidmehmoodtariq-dev/feedback-next',
     image: bookCover, // Placeholder, update with a relevant image if available
-    pinned: false,
+    pinned: true,
   },
   {
     id: 'job-portal',

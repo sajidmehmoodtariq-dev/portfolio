@@ -82,21 +82,21 @@ const OwnerLoginPage = () => {
 
   if (isCheckingAuth) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
         <LoadingSpinner size="lg" text="Checking authentication..." />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-md"
       >
-        <div className="bg-gray-800 rounded-3xl p-8 border border-gray-700">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-white">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-emerald-300/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -104,8 +104,8 @@ const OwnerLoginPage = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-white mb-2">Owner Access</h1>
-            <p className="text-gray-400">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Owner Access</h1>
+            <p className="text-gray-600 dark:text-gray-400">
               Enter your credentials to access the blog management dashboard.
             </p>
           </div>

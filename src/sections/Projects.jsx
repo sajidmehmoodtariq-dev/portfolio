@@ -12,7 +12,7 @@ const Projects = () => {
         <SectionHeader eyebrow="Real World Projects" title="Featured Projects" description="See how I transformed these projects into success stories. Each project showcases my skills in web development, design, and user experience. Click on the links to view the projects in action." />
         <div className="flex flex-col mt-10 gap-20 md:mt-20">
           {
-            portfolioProjects.filter(p => p.pinned).slice(0,3).map((project,projectIndex) => (
+            portfolioProjects.filter(p => p.pinned).slice(0,4).map((project,projectIndex) => (
               <Card key={project.id || project.title} className="px-8 pt-8 md:pt-12 md:px-10 pb-0 sticky"
               style={{
                 top: `calc(64px + ${projectIndex * 40}px`
@@ -26,11 +26,11 @@ const Projects = () => {
                       <span>{project.year}</span>
                     </div>
 
-                    <h3 className="font-serif text-2xl mt-2 md:text-4xl md:mt-5">{project.title}</h3>
-                    <hr className="border-t-2 border-white/5 mt-4 md:mt-5" />
+                    <h3 className="font-serif text-2xl mt-2 md:text-4xl md:mt-5 text-gray-900 transition-colors duration-500">{project.title}</h3>
+                    <hr className="border-t-2 border-gray-300 mt-4 md:mt-5 transition-colors duration-500" />
                     <ul className="mt-4 flex flex-col gap-4 md:mt-5">
                       {project.results?.map((result) => (
-                        <li key={result.title} className="flex gap-2 text-sm md:text-base text-white/50 ">
+                        <li key={result.title} className="flex gap-2 text-sm md:text-base text-gray-600 transition-colors duration-500">
                           <CheckIcon className="size-5 md:size-6" />
                           <span>{result.title}</span>
                         </li>
@@ -38,13 +38,13 @@ const Projects = () => {
                     </ul>
                     <div className="flex gap-4 mt-6 mb-4 flex-col sm:flex-row">
                       <a href={project.link} target="_blank" rel="noopener noreferrer">
-                        <button className="bg-white p-2 md:px-6 text-gray-950 h-12 w-full rounded-xl font-semibold inline-flex items-center justify-center">
+                        <button className="bg-white p-2 md:px-6 text-gray-900 h-12 w-full rounded-xl font-semibold inline-flex items-center justify-center border border-gray-300 transition-colors duration-300">
                           <ArrowUprightIcon className="size-5 mr-2" />
                           <span>Visit Live Site</span>
                         </button>
                       </a>
                       <a href={project.github || project.Github} target="_blank" rel="noopener noreferrer">
-                        <button className="text-white p-2 md:px-6 bg-gray-950 h-12 w-full rounded-xl font-semibold inline-flex items-center justify-center">
+                        <button className="text-gray-900 p-2 md:px-6 bg-gray-100 h-12 w-full rounded-xl font-semibold inline-flex items-center justify-center border border-gray-300 transition-colors duration-300">
                           <ArrowUprightIcon className="size-5 mr-2" />
                           <span>Visit on GitHub</span>
                         </button>
@@ -61,7 +61,7 @@ const Projects = () => {
         </div>
       </div>
       <div className="mt-16 text-center">
-        <p className="text-white">Want to see more of my work? Check out my <a href="/projects" className="underline hover:text-white/40">Projects</a>.</p>
+  <p className="text-gray-700">Want to see more of my work? Check out my <a href="/projects" className="underline hover:text-emerald-500 transition-colors duration-300">Projects</a>.</p>
       </div>
     </section>
   );
