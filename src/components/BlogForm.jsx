@@ -7,12 +7,19 @@ const BlogForm = ({ initialData = {}, onSubmit, isLoading = false, submitText = 
   const [formData, setFormData] = useState({
     title: initialData.title || '',
     excerpt: initialData.excerpt || '',
-    content: initialData.content || '',
     tags: initialData.tags?.join(', ') || '',
     featured: initialData.featured || false,
     published: initialData.published !== undefined ? initialData.published : true,
     imageUrl: initialData.imageUrl || ''
   });
+
+  // Blog content and code blocks as an array of {type: 'content'|'code', value: string}
+  const [sections, setSections] = useState(
+    initialData.sections || [
+      { type: 'content', value: initialData.content || '' }
+    ]
+  );
+  const [activeSection, setActiveSection] = useState(sections.length - 1);
 
   const [errors, setErrors] = useState({});
 
@@ -38,7 +45,8 @@ const BlogForm = ({ initialData = {}, onSubmit, isLoading = false, submitText = 
     if (!formData.excerpt.trim()) {
       newErrors.excerpt = 'Excerpt is required';
     }
-    if (!formData.content.trim()) {
+    // At least one content section must have non-empty value
+    if (!sections.some(s => s.value.trim())) {
       newErrors.content = 'Content is required';
     }
 
@@ -46,21 +54,38 @@ const BlogForm = ({ initialData = {}, onSubmit, isLoading = false, submitText = 
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleSectionChange = (idx, value) => {
+    setSections(prev => prev.map((s, i) => i === idx ? { ...s, value } : s));
+  };
+
+  const handleAddCodeSnippet = () => {
+    // Insert a code section after the current active section, then a new content section
+    setSections(prev => {
+      const newSections = [...prev];
+      newSections.splice(activeSection + 1, 0, { type: 'code', value: '' }, { type: 'content', value: '' });
+      return newSections;
+    });
+    setActiveSection(activeSection + 1); // Focus on the new code section
+  };
+
+  const handleTabClick = (idx) => {
+    setActiveSection(idx);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (!validateForm()) {
       return;
     }
-
     const submitData = {
       ...formData,
       tags: formData.tags
         .split(',')
         .map(tag => tag.trim())
-        .filter(tag => tag.length > 0)
+        .filter(tag => tag.length > 0),
+      sections,
+      content: sections.map(s => s.value).join('\n\n') // fallback for old content
     };
-
     await onSubmit(submitData);
   };
 
@@ -161,20 +186,49 @@ const BlogForm = ({ initialData = {}, onSubmit, isLoading = false, submitText = 
           )}
         </div>
 
-        {/* Content */}
+        {/* Content & Code Sections */}
         <div>
-          <label htmlFor="content" className="block text-sm font-medium text-gray-300 mb-2">
-            Content *
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Blog Content & Code Snippets *
           </label>
-          <textarea
-            id="content"
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            rows={12}
-            className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-emerald-300 transition-colors duration-300 resize-y"
-            placeholder="Write your blog content here... (Markdown supported)"
-          />
+          <div className="flex flex-wrap gap-2 mb-2">
+            {sections.map((section, idx) => (
+              <button
+                key={idx}
+                type="button"
+                className={`px-3 py-1 rounded-t-lg border-b-2 ${activeSection === idx ? 'bg-emerald-300 text-gray-900 border-emerald-300' : 'bg-gray-700 text-gray-300 border-transparent'} transition-colors duration-200`}
+                onClick={() => handleTabClick(idx)}
+              >
+                {section.type === 'content' ? `Content ${Math.floor(idx/2)+1}` : `Code Snippet ${Math.ceil(idx/2)}`}
+              </button>
+            ))}
+          </div>
+          <div className="mb-2">
+            {sections[activeSection].type === 'content' ? (
+              <textarea
+                value={sections[activeSection].value}
+                onChange={e => handleSectionChange(activeSection, e.target.value)}
+                rows={8}
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-emerald-300 transition-colors duration-300 resize-y"
+                placeholder="Write your blog content here... (Markdown supported)"
+              />
+            ) : (
+              <textarea
+                value={sections[activeSection].value}
+                onChange={e => handleSectionChange(activeSection, e.target.value)}
+                rows={6}
+                className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-emerald-300 font-mono focus:outline-none focus:border-emerald-300 transition-colors duration-300 resize-y"
+                placeholder="Paste your code snippet here..."
+              />
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={handleAddCodeSnippet}
+            className="mb-2 px-4 py-2 bg-emerald-700 text-white rounded hover:bg-emerald-800 transition-colors duration-200"
+          >
+            + Add Code Snippet
+          </button>
           {errors.content && <p className="mt-1 text-sm text-red-400">{errors.content}</p>}
         </div>
 

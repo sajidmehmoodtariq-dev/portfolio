@@ -5,6 +5,9 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 const BlogPost = ({ params }) => {
   const [blog, setBlog] = useState(null);
@@ -45,38 +48,37 @@ const BlogPost = ({ params }) => {
     });
   };
 
-  const formatContent = (content) => {
-    // Simple formatting for line breaks and basic markdown-like syntax
-    return content
-      .split('\n')
-      .map((paragraph, index) => {
-        if (paragraph.trim() === '') return null;
-        
-        // Check if it's a heading
-        if (paragraph.startsWith('# ')) {
+
+  // Render blog sections (content/code)
+  const renderSections = (sections, fallbackContent) => {
+    if (Array.isArray(sections) && sections.length > 0) {
+      return sections.map((section, idx) => {
+        if (section.type === 'code') {
           return (
-            <h2 key={index} className="text-2xl font-bold text-white mt-8 mb-4">
-              {paragraph.slice(2)}
-            </h2>
+            <div key={idx} className="my-6">
+              <SyntaxHighlighter language="javascript" style={oneDark} customStyle={{ borderRadius: '0.5rem', fontSize: '1rem', padding: '1.2em' }}>
+                {section.value}
+              </SyntaxHighlighter>
+            </div>
+          );
+        } else {
+          return (
+            <div key={idx} className="mb-6 prose prose-invert prose-lg max-w-none">
+              <ReactMarkdown>{section.value}</ReactMarkdown>
+            </div>
           );
         }
-        
-        if (paragraph.startsWith('## ')) {
-          return (
-            <h3 key={index} className="text-xl font-bold text-white mt-6 mb-3">
-              {paragraph.slice(3)}
-            </h3>
-          );
-        }
-        
-        // Regular paragraph
-        return (
-          <p key={index} className="text-gray-300 leading-relaxed mb-4">
-            {paragraph}
-          </p>
-        );
-      })
-      .filter(Boolean);
+      });
+    } else if (fallbackContent) {
+      // fallback for old blogs
+      return (
+        <div className="prose prose-invert prose-lg max-w-none">
+          <ReactMarkdown>{fallbackContent}</ReactMarkdown>
+        </div>
+      );
+    } else {
+      return null;
+    }
   };
 
   if (loading) {
@@ -199,7 +201,7 @@ const BlogPost = ({ params }) => {
           >
             <div className="bg-gray-800 rounded-3xl p-8 border border-gray-700">
               <div className="text-lg">
-                {blog?.content && formatContent(blog.content)}
+                {renderSections(blog?.sections, blog?.content)}
               </div>
             </div>
           </motion.div>

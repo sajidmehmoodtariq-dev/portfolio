@@ -29,7 +29,7 @@ export async function GET(request, { params }) {
       query.published = true;
     }
     
-    const blog = await Blog.findOne(query).lean();
+  const blog = await Blog.findOne(query).lean();
     
     if (!blog) {
       return NextResponse.json(
@@ -90,6 +90,7 @@ export async function PUT(request, { params }) {
     // Update fields
     if (title !== undefined) blog.title = title;
     if (content !== undefined) blog.content = content;
+  if (sections !== undefined) blog.sections = sections;
     if (excerpt !== undefined) blog.excerpt = excerpt;
     if (tags !== undefined) blog.tags = tags;
     if (featured !== undefined) blog.featured = featured;

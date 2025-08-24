@@ -11,6 +11,19 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Blog content is required']
   },
+  sections: [
+    {
+      type: {
+        type: String,
+        enum: ['content', 'code'],
+        required: true
+      },
+      value: {
+        type: String,
+        required: true
+      }
+    }
+  ],
   excerpt: {
     type: String,
     required: [true, 'Blog excerpt is required'],

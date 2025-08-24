@@ -80,11 +80,11 @@ export async function POST(request) {
     await connectDB();
     
     const body = await request.json();
-    const { title, content, excerpt, tags, featured, published, imageUrl } = body;
-    
-    if (!title || !content || !excerpt) {
+    const { title, content, excerpt, tags, featured, published, imageUrl, sections } = body;
+
+    if (!title || !excerpt || (!content && (!sections || !sections.length))) {
       return NextResponse.json(
-        { success: false, message: 'Title, content, and excerpt are required' },
+        { success: false, message: 'Title, excerpt, and content/sections are required' },
         { status: 400 }
       );
     }
@@ -108,7 +108,8 @@ export async function POST(request) {
     
     const blog = new Blog({
       title,
-      content,
+      content: content || (sections ? sections.map(s => s.value).join('\n\n') : ''),
+      sections: sections || [],
       excerpt,
       slug: generateSlug(title), // Set slug explicitly
       tags: tags || [],
