@@ -4,6 +4,8 @@
  * Run this script once to set up the default configuration
  * Usage: node scripts/init-github-config.js
  */
+import dotenv from 'dotenv';
+dotenv.config();
 
 const NEXT_URL = process.env.NEXTAUTH_URL || 'http://localhost:3000';
 

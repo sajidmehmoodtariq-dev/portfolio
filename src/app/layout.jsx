@@ -95,6 +95,7 @@ export default function RootLayout({ children }) {
       </head>
       <body
         className={`${inter.variable} ${roboto.variable} antialiased font-sans min-h-screen transition-colors duration-300`}
+        suppressHydrationWarning={true}
       >
         <div className="fixed top-4 right-4 z-50">
           <ThemeToggle />

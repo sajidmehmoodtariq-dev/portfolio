@@ -9,6 +9,9 @@ export async function GET(request, { params }) {
   try {
     await connectDB();
     
+    // Await params to fix Next.js 15 compatibility
+    const { slug } = await params;
+    
     // Check if user is authenticated (for admin access to drafts)
     const cookieStore = await cookies();
     const token = cookieStore.get('owner-token')?.value;
@@ -24,7 +27,7 @@ export async function GET(request, { params }) {
     }
     
     // Build query - admin can see all blogs, public users only published
-    let query = { slug: params.slug };
+    let query = { slug: slug };
     if (!isAdmin) {
       query.published = true;
     }
@@ -54,6 +57,9 @@ export async function GET(request, { params }) {
 // PUT /api/blogs/[slug] - Update blog by slug (protected)
 export async function PUT(request, { params }) {
   try {
+    // Await params to fix Next.js 15 compatibility
+    const { slug } = await params;
+    
     const cookieStore = await cookies();
     const token = cookieStore.get('owner-token')?.value;
     
@@ -76,9 +82,9 @@ export async function PUT(request, { params }) {
     await connectDB();
     
     const body = await request.json();
-    const { title, content, excerpt, tags, featured, published, imageUrl } = body;
+    const { title, content, sections, excerpt, tags, featured, published, imageUrl } = body;
     
-    const blog = await Blog.findOne({ slug: params.slug });
+    const blog = await Blog.findOne({ slug: slug });
     
     if (!blog) {
       return NextResponse.json(
@@ -90,7 +96,7 @@ export async function PUT(request, { params }) {
     // Update fields
     if (title !== undefined) blog.title = title;
     if (content !== undefined) blog.content = content;
-  if (sections !== undefined) blog.sections = sections;
+    if (sections !== undefined) blog.sections = sections;
     if (excerpt !== undefined) blog.excerpt = excerpt;
     if (tags !== undefined) blog.tags = tags;
     if (featured !== undefined) blog.featured = featured;
@@ -117,6 +123,9 @@ export async function PUT(request, { params }) {
 // DELETE /api/blogs/[slug] - Delete blog by slug (protected)
 export async function DELETE(request, { params }) {
   try {
+    // Await params to fix Next.js 15 compatibility
+    const { slug } = await params;
+    
     const cookieStore = await cookies();
     const token = cookieStore.get('owner-token')?.value;
     
@@ -138,7 +147,7 @@ export async function DELETE(request, { params }) {
     
     await connectDB();
     
-    const blog = await Blog.findOneAndDelete({ slug: params.slug });
+    const blog = await Blog.findOneAndDelete({ slug: slug });
     
     if (!blog) {
       return NextResponse.json(

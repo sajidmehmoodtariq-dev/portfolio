@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import BlogForm from '@/components/BlogForm';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import GitHubStatsManager from '@/components/GitHubStatsManager';
+import ProjectsManager from '@/components/ProjectsManager';
 
 const DashboardPage = () => {
   const [user, setUser] = useState(null);
@@ -330,6 +331,16 @@ const DashboardPage = () => {
             >
               GitHub Stats
             </button>
+            <button
+              onClick={() => {setActiveTab('projects'); setEditingBlog(null);}}
+              className={`px-6 py-3 font-medium transition-colors duration-300 ${
+                activeTab === 'projects'
+                  ? 'text-emerald-300 border-b-2 border-emerald-300'
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              Projects
+            </button>
           </div>
         </div>
 
@@ -480,6 +491,18 @@ const DashboardPage = () => {
                 </div>
               </div>
               <GitHubStatsManager />
+            </div>
+          )}
+
+          {activeTab === 'projects' && !editingBlog && (
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Projects Management</h2>
+                <div className="text-sm text-gray-400">
+                  Configure which GitHub repositories and portfolio projects appear on your site
+                </div>
+              </div>
+              <ProjectsManager />
             </div>
           )}
         </motion.div>

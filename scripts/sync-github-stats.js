@@ -15,11 +15,13 @@
  * - CRON_SECRET: Secret token for authentication
  */
 
-const https = require('https');
-const http = require('http');
-const { URL } = require('url');
+import https from 'https';
+import http from 'http';
+import { URL } from 'url';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const SYNC_URL = process.env.SYNC_URL || 'http://localhost:3000/api/github-stats/sync';
+const SYNC_URL = process.env.SYNC_URL || 'https://www.sajidmehmoodtariq.me/api/github-stats/sync';
 const CRON_SECRET = process.env.CRON_SECRET || 'default-secret';
 
 function makeRequest(url, options) {

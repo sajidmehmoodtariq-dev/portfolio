@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "seed:github-stats": "node scripts/seed-github-stats.js",
-    "update:repos": "node scripts/fetch-github-repos.js"
+    "update:repos": "node scripts/fetch-github-repos.js",
+    "init:github-config": "node scripts/init-github-config.js",
+    "sync:github-stats": "node scripts/sync-github-stats.js"
   },
   "dependencies": {
     "@svgr/webpack": "^8.1.0",
