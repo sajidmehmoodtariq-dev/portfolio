@@ -4,55 +4,6 @@ import { useState, useEffect } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import Image from 'next/image';
 
-// Project category configurations
-const projectCategories = {
-  'Next.js': {
-    icon: '⚡',
-    description: 'Next.js applications with React and modern features',
-    color: 'from-black to-gray-700'
-  },
-  'React': {
-    icon: '⚛️', 
-    description: 'React applications and components',
-    color: 'from-blue-400 to-cyan-400'
-  },
-  'MERN Stack': {
-    icon: '🏗️',
-    description: 'MongoDB, Express, React, Node.js full-stack applications',
-    color: 'from-green-400 to-emerald-500'
-  },
-  'React + Express': {
-    icon: '🔗',
-    description: 'React frontend with Express.js backend',
-    color: 'from-purple-400 to-pink-400'
-  },
-  'HTML/CSS/JS': {
-    icon: '🌐',
-    description: 'Vanilla HTML, CSS, and JavaScript projects',
-    color: 'from-orange-400 to-red-400'
-  },
-  'Backend API': {
-    icon: '⚙️',
-    description: 'Server-side APIs and backend services',
-    color: 'from-gray-600 to-gray-800'
-  },
-  'Portfolio/Landing': {
-    icon: '🎨',
-    description: 'Portfolio websites and landing pages',
-    color: 'from-indigo-400 to-purple-500'
-  },
-  'Game/Interactive': {
-    icon: '🎮',
-    description: 'Games and interactive applications',
-    color: 'from-yellow-400 to-orange-500'
-  },
-  'Other': {
-    icon: '💡',
-    description: 'Miscellaneous projects and experiments',
-    color: 'from-gray-400 to-gray-600'
-  }
-};
-
 export default function ProjectsManager() {
   const [config, setConfig] = useState({ portfolioProjects: [], githubProjects: [] });
   const [isLoading, setIsLoading] = useState(true);
@@ -61,7 +12,7 @@ export default function ProjectsManager() {
   const [message, setMessage] = useState('');
   const [activeTab, setActiveTab] = useState('github');
   const [editingCategory, setEditingCategory] = useState(null);
-  const [categories, setCategories] = useState(projectCategories);
+  const [categories, setCategories] = useState({});
 
   useEffect(() => {
     loadConfig();
@@ -77,6 +28,8 @@ export default function ProjectsManager() {
           portfolioProjects: data.portfolioProjects || [],
           githubProjects: data.githubProjects || []
         });
+        // Load categories from API, fallback to empty object if not available
+        setCategories(data.categories || {});
       }
     } catch (error) {
       console.error('Error loading projects config:', error);
@@ -97,6 +50,10 @@ export default function ProjectsManager() {
           portfolioProjects: data.portfolioProjects || [],
           githubProjects: data.githubProjects || []
         });
+        // Update categories as well
+        if (data.categories) {
+          setCategories(data.categories);
+        }
         setMessage('GitHub projects refreshed successfully!');
         setTimeout(() => setMessage(''), 3000);
       } else {
@@ -597,7 +554,7 @@ export default function ProjectsManager() {
                       </button>
                       <button
                         onClick={() => {
-                          setCategories(projectCategories); // Reset to original
+                          loadConfig(); // Reload from server to cancel changes
                           setEditingCategory(null);
                         }}
                         className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm"

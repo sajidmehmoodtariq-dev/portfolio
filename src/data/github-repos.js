@@ -2,7 +2,12 @@
 // Last updated: 2025-08-21T20:10:00.000Z
 // Only showing professional and noteworthy projects
 
-const githubRepos = [
+// DEPRECATED: This file is no longer used
+// GitHub repositories are now loaded dynamically from /api/projects/config
+// Categories are managed through the owner dashboard
+// This file is kept for reference only
+
+export const githubRepos = [
 
   // Notable Frontend Projects
   {

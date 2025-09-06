@@ -1,3 +1,8 @@
+// DEPRECATED: This file is no longer used
+// GitHub stats are now loaded dynamically from /api/github-stats
+// Categories are managed through the owner dashboard  
+// This file is kept for reference only
+
 const githubStats = {
   // Overview Stats
   totalRepos: 47,

@@ -1,3 +1,8 @@
+// DEPRECATED: This file is no longer used
+// Projects are now loaded dynamically from /api/projects/config
+// Categories are managed through the owner dashboard
+// This file is kept for reference only
+
 import portal from '@/assets/images/portal.png'
 import lightSaasLandingPage from '@/assets/images/light-saas-landing-page.png'
 import aiStartupLandingPage from '@/assets/images/ai-startup-landing-page.png'

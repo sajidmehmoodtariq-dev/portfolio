@@ -131,6 +131,10 @@ const portfolioProjectSchema = new mongoose.Schema({
 const projectsConfigSchema = new mongoose.Schema({
   portfolioProjects: [portfolioProjectSchema],
   githubProjects: [projectItemSchema],
+  categories: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {}
+  },
   isActive: {
     type: Boolean,
     default: true

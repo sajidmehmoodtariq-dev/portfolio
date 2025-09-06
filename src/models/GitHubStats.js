@@ -156,15 +156,15 @@ const gitHubStatsSchema = new mongoose.Schema({
   // Language Stats
   topLanguages: [topLanguageSchema],
   
-  // Project Stats by Category
+  // Project Stats by Category (flexible schema to support dynamic categories)
   projectsByCategory: {
-    'Frontend Projects': { type: Number, default: 0, min: 0 },
-    'Web Applications': { type: Number, default: 0, min: 0 },
-    'Backend & APIs': { type: Number, default: 0, min: 0 },
-    'Learning Projects': { type: Number, default: 0, min: 0 },
-    'Tools & Utilities': { type: Number, default: 0, min: 0 },
-    'Mobile Apps': { type: Number, default: 0, min: 0 },
-    'Other': { type: Number, default: 0, min: 0 }
+    type: Map,
+    of: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    default: new Map()
   },
   
   // Recent Activity

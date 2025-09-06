@@ -6,14 +6,63 @@ import ProjectsConfig from "@/models/ProjectsConfig";
 const GITHUB_USERNAME = 'sajidmehmoodtariq-dev';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
-// Default portfolio projects (keeping the existing ones)
+// Default project categories
+const defaultProjectCategories = {
+  'Next.js': {
+    icon: '⚡',
+    description: 'Next.js applications with React and modern features',
+    color: 'from-black to-gray-700'
+  },
+  'React': {
+    icon: '⚛️', 
+    description: 'React applications and components',
+    color: 'from-blue-400 to-cyan-400'
+  },
+  'MERN Stack': {
+    icon: '🏗️',
+    description: 'MongoDB, Express, React, Node.js full-stack applications',
+    color: 'from-green-400 to-emerald-500'
+  },
+  'React + Express': {
+    icon: '🔗',
+    description: 'React frontend with Express.js backend',
+    color: 'from-purple-400 to-pink-400'
+  },
+  'HTML/CSS/JS': {
+    icon: '🌐',
+    description: 'Vanilla HTML, CSS, and JavaScript projects',
+    color: 'from-orange-400 to-red-400'
+  },
+  'Backend API': {
+    icon: '⚙️',
+    description: 'Server-side APIs and backend services',
+    color: 'from-gray-600 to-gray-800'
+  },
+  'Portfolio/Landing': {
+    icon: '🎨',
+    description: 'Portfolio websites and landing pages',
+    color: 'from-indigo-400 to-purple-500'
+  },
+  'Game/Interactive': {
+    icon: '🎮',
+    description: 'Games and interactive applications',
+    color: 'from-yellow-400 to-orange-500'
+  },
+  'Other': {
+    icon: '💡',
+    description: 'Miscellaneous projects and experiments',
+    color: 'from-gray-400 to-gray-600'
+  }
+};
+
+// Default portfolio projects (categories can be set via owner dashboard)
 const defaultPortfolioProjects = [
   {
     id: 'feedback-anonymous',
     company: 'Personal',
     year: '2025',
     title: 'Anonymous Feedback Web App',
-    category: 'Next.js',
+    category: 'Other', // Can be changed via owner dashboard
     results: [
       { title: 'Allows users to send anonymous mentions and get honest feedback' },
       { title: 'Built with Next.js and deployed on Vercel' },
@@ -31,7 +80,7 @@ const defaultPortfolioProjects = [
     company: 'Commercial Electricians Australia',
     year: '2025',
     title: 'Job Portal',
-    category: 'MERN',
+    category: 'Other', // Can be changed via owner dashboard
     results: [
       { title: 'Boosted sales by 20%' },
       { title: 'Expanded customer reach by 35%' },
@@ -49,7 +98,7 @@ const defaultPortfolioProjects = [
     company: 'Punjab Group of College',
     year: '2025',
     title: 'PGCDHA',
-    category: 'MERN',
+    category: 'Other', // Can be changed via owner dashboard
     results: [
       { title: 'Enhanced user experience by 40%' },
       { title: 'Improved site speed by 50%' },
@@ -67,7 +116,7 @@ const defaultPortfolioProjects = [
     company: 'Self',
     year: '2024',
     title: 'Portfolio',
-    category: 'Threejs',
+    category: 'Other', // Can be changed via owner dashboard
     results: [
       { title: 'Enhanced user experience by 40%' },
       { title: 'Improved site speed by 50%' },
@@ -135,44 +184,17 @@ async function fetchGitHubRepos() {
 }
 
 function categorizeRepo(repo) {
+  // Simple categorization - most repos will be "Other" 
+  // so owner can categorize them properly via dashboard
   const name = repo.name.toLowerCase();
   const description = (repo.description || '').toLowerCase();
-  const topics = repo.topics || [];
-
-  // Check topics first
-  if (topics.includes('frontend') || topics.includes('react') || topics.includes('nextjs')) {
-    return 'Frontend Projects';
+  
+  // Only categorize very obvious cases, everything else goes to "Other"
+  if (name.includes('portfolio') || description.includes('portfolio')) {
+    return 'Portfolio/Landing';
   }
-  if (topics.includes('backend') || topics.includes('api') || topics.includes('server')) {
-    return 'Backend & APIs';
-  }
-  if (topics.includes('webapp') || topics.includes('fullstack')) {
-    return 'Web Applications';
-  }
-  if (topics.includes('learning') || topics.includes('tutorial') || topics.includes('course')) {
-    return 'Learning Projects';
-  }
-  if (topics.includes('tool') || topics.includes('utility')) {
-    return 'Tools & Utilities';
-  }
-
-  // Check by name and description
-  if (name.includes('api') || name.includes('backend') || description.includes('api')) {
-    return 'Backend & APIs';
-  }
-  if (name.includes('frontend') || name.includes('react') || name.includes('next') || description.includes('frontend')) {
-    return 'Frontend Projects';
-  }
-  if (name.includes('app') || name.includes('webapp') || description.includes('application')) {
-    return 'Web Applications';
-  }
-  if (name.includes('learning') || name.includes('tutorial') || name.includes('course') || description.includes('learning')) {
-    return 'Learning Projects';
-  }
-  if (name.includes('tool') || name.includes('util') || description.includes('tool')) {
-    return 'Tools & Utilities';
-  }
-
+  
+  // Default to "Other" - owner can recategorize via dashboard
   return 'Other';
 }
 
@@ -199,6 +221,7 @@ export async function GET(req) {
         config = await ProjectsConfig.create({
           portfolioProjects: defaultPortfolioProjects,
           githubProjects,
+          categories: defaultProjectCategories,
           isActive: true
         });
       } else if (refresh) {
@@ -208,11 +231,18 @@ export async function GET(req) {
         await config.save();
       }
     }
+
+    // Ensure categories exist (for backward compatibility)
+    if (!config.categories || Object.keys(config.categories).length === 0) {
+      config.categories = defaultProjectCategories;
+      await config.save();
+    }
     
     return NextResponse.json({
       success: true,
       portfolioProjects: config.portfolioProjects,
       githubProjects: config.githubProjects,
+      categories: config.categories,
       lastUpdated: config.lastUpdated
     });
     
@@ -233,11 +263,11 @@ export async function POST(req) {
   try {
     await connectDB();
     
-    const { portfolioProjects, githubProjects } = await req.json();
+    const { portfolioProjects, githubProjects, categories } = await req.json();
     
-    if (!Array.isArray(portfolioProjects) && !Array.isArray(githubProjects)) {
+    if (!Array.isArray(portfolioProjects) && !Array.isArray(githubProjects) && !categories) {
       return NextResponse.json(
-        { error: "Either portfolioProjects or githubProjects must be provided as arrays" },
+        { error: "Either portfolioProjects, githubProjects, or categories must be provided" },
         { status: 400 }
       );
     }
@@ -249,6 +279,7 @@ export async function POST(req) {
     
     if (portfolioProjects) updateData.portfolioProjects = portfolioProjects;
     if (githubProjects) updateData.githubProjects = githubProjects;
+    if (categories) updateData.categories = categories;
     
     const updatedConfig = await ProjectsConfig.findOneAndUpdate(
       { isActive: true },
@@ -265,6 +296,7 @@ export async function POST(req) {
       message: "Projects configuration updated successfully",
       portfolioProjects: updatedConfig.portfolioProjects,
       githubProjects: updatedConfig.githubProjects,
+      categories: updatedConfig.categories,
       lastUpdated: updatedConfig.lastUpdated
     });
     
