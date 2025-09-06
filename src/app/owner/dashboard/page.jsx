@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import BlogForm from '@/components/BlogForm';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import GitHubStatsForm from '@/components/GitHubStatsForm';
+import GitHubStatsManager from '@/components/GitHubStatsManager';
 
 const DashboardPage = () => {
   const [user, setUser] = useState(null);
@@ -16,8 +16,8 @@ const DashboardPage = () => {
   const [editingBlog, setEditingBlog] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadingFullBlog, setLoadingFullBlog] = useState(false);
-  const [githubStats, setGithubStats] = useState(null);
-  const [githubStatsLoading, setGithubStatsLoading] = useState(false);
+  const [githubSyncStatus, setGithubSyncStatus] = useState(null);
+  const [refreshingStats, setRefreshingStats] = useState(false);
 
   const router = useRouter();
 
@@ -41,6 +41,46 @@ const DashboardPage = () => {
 
     checkAuth();
   }, [router]);
+
+  // Check GitHub sync status
+  const checkGitHubSync = async () => {
+    try {
+      const response = await fetch('/api/github-stats/sync');
+      if (response.ok) {
+        const data = await response.json();
+        setGithubSyncStatus(data);
+      }
+    } catch (error) {
+      console.error('Error checking GitHub sync status:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      checkGitHubSync();
+    }
+  }, [user]);
+
+  // Manual refresh GitHub stats
+  const refreshGitHubStats = async () => {
+    setRefreshingStats(true);
+    try {
+      const response = await fetch('/api/github-stats', { method: 'POST' });
+      const data = await response.json();
+      
+      if (data.success) {
+        alert('GitHub stats refreshed successfully!');
+        checkGitHubSync(); // Update sync status
+      } else {
+        alert(`Error refreshing stats: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('Error refreshing GitHub stats:', error);
+      alert('Failed to refresh GitHub stats. Please try again.');
+    } finally {
+      setRefreshingStats(false);
+    }
+  };
 
   const fetchBlogs = async () => {
     setBlogsLoading(true);
@@ -210,6 +250,33 @@ const DashboardPage = () => {
             </div>
             
             <div className="flex items-center gap-4">
+              {/* GitHub Stats Status */}
+              {githubSyncStatus && (
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${
+                    githubSyncStatus.synced && !githubSyncStatus.isStale 
+                      ? 'bg-green-500' 
+                      : githubSyncStatus.nextSyncRecommended 
+                        ? 'bg-yellow-500' 
+                        : 'bg-red-500'
+                  }`}></div>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    Stats: {githubSyncStatus.synced 
+                      ? `${Math.round(githubSyncStatus.hoursSinceUpdate)}h ago` 
+                      : 'Not synced'
+                    }
+                  </span>
+                  <button
+                    onClick={refreshGitHubStats}
+                    disabled={refreshingStats}
+                    className="text-xs px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Refresh GitHub Stats"
+                  >
+                    {refreshingStats ? '...' : '⟳'}
+                  </button>
+                </div>
+              )}
+              
               <a
                 href="/blogs"
                 target="_blank"
@@ -409,10 +476,10 @@ const DashboardPage = () => {
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">GitHub Stats Management</h2>
                 <div className="text-sm text-gray-400">
-                  Update your GitHub statistics weekly for accurate portfolio data
+                  Configure which GitHub statistics appear on your portfolio
                 </div>
               </div>
-              <GitHubStatsForm />
+              <GitHubStatsManager />
             </div>
           )}
         </motion.div>

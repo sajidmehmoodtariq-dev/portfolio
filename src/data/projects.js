@@ -1,7 +1,7 @@
-import darkSaasLandingPage from '@/assets/images/dark-saas-landing-page.png'
+import portal from '@/assets/images/portal.png'
 import lightSaasLandingPage from '@/assets/images/light-saas-landing-page.png'
 import aiStartupLandingPage from '@/assets/images/ai-startup-landing-page.png'
-import bookCover from '@/assets/images/book-cover.png'
+import anonymous from '@/assets/images/anonymous.png'
 
 const portfolioProjects = [
   {
@@ -15,9 +15,9 @@ const portfolioProjects = [
       { title: 'Built with Next.js and deployed on Vercel' },
       { title: 'Helps creators and professionals receive true responses easily' }
     ],
-    link: 'https://feedback-five-topaz.vercel.app/send-message/sajidmehmood',
+    link: 'https://feedback-five-topaz.vercel.app',
     github: 'https://github.com/sajidmehmoodtariq-dev/feedback-next',
-    image: bookCover, // Placeholder, update with a relevant image if available
+    image: anonymous, // Placeholder, update with a relevant image if available
     pinned: true,
   },
   {
@@ -33,7 +33,7 @@ const portfolioProjects = [
     ],
     link: 'https://portal.mygcce.com.au',
     github: 'https://github.com/sajidmehmoodtariq-dev/Job_Portal_Frontend',
-    image: darkSaasLandingPage,
+    image: portal,
     pinned: true,
   },
   {

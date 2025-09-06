@@ -25,40 +25,68 @@ export default function Achievements() {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetch(`/api/github-stats`, { cache: 'no-store' });
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
-
-        setAchievements([
-          {
-            title: "Public Repositories",
-            value: `${data.totalRepos}`,
-            description: "Open-source projects and repositories",
-            icon: "💻",
-            gradient: "from-emerald-400 to-sky-400"
-          },
-          {
-            title: "YTD Contributions",
-            value: `${data.contributionsThisYear}`,
-            description: "Contributions made this year",
-            icon: "🔥",
-            gradient: "from-blue-400 to-cyan-400"
-          },
-          {
-            title: "Current Streak",
-            value: `${data.currentStreak} days`,
-            description: "Consecutive days with contributions",
-            icon: "⏱️",
-            gradient: "from-purple-400 to-pink-400"
-          },
-          {
-            title: "Total Stars",
-            value: `${data.totalStars}`,
-            description: "Stars earned across repositories",
-            icon: "🌟",
-            gradient: "from-orange-400 to-red-400"
-          }
+        // Load both GitHub stats and configuration
+        const [statsRes, configRes] = await Promise.all([
+          fetch(`/api/github-stats`, { cache: 'no-store' }),
+          fetch(`/api/github-stats/config`, { cache: 'no-store' })
         ]);
+        
+        const statsData = await statsRes.json();
+        const configData = await configRes.json();
+        
+        if (statsData.error) throw new Error(statsData.error);
+        
+        // Use configuration if available, otherwise use fallback
+        let displayStats = [];
+        
+        if (configData.success && configData.config) {
+          // Get visible stats from configuration
+          const visibleStats = configData.config
+            .filter(stat => stat.visible)
+            .sort((a, b) => a.order - b.order);
+          
+          displayStats = visibleStats.map(stat => ({
+            title: stat.title,
+            value: getStatValue(statsData, stat.key),
+            description: stat.description,
+            icon: stat.icon,
+            gradient: stat.gradient
+          }));
+        } else {
+          // Fallback to hardcoded stats
+          displayStats = [
+            {
+              title: "Public Repositories",
+              value: `${statsData.totalRepos}`,
+              description: "Open-source projects and repositories",
+              icon: "💻",
+              gradient: "from-emerald-400 to-sky-400"
+            },
+            {
+              title: "YTD Contributions",
+              value: `${statsData.contributionsThisYear}`,
+              description: "Contributions made this year",
+              icon: "🔥",
+              gradient: "from-blue-400 to-cyan-400"
+            },
+            {
+              title: "Current Streak",
+              value: `${statsData.currentStreak} days`,
+              description: "Consecutive days with contributions",
+              icon: "⏱️",
+              gradient: "from-purple-400 to-pink-400"
+            },
+            {
+              title: "Total Stars",
+              value: `${statsData.totalStars}`,
+              description: "Stars earned across repositories",
+              icon: "🌟",
+              gradient: "from-orange-400 to-red-400"
+            }
+          ];
+        }
+        
+        setAchievements(displayStats);
       } catch (e) {
         console.error("Stats error:", e);
         // Keep fallback data on error
@@ -68,6 +96,18 @@ export default function Achievements() {
     };
     load();
   }, []);
+
+  const getStatValue = (data, key) => {
+    const value = data[key];
+    if (value === undefined || value === null) return '—';
+    
+    // Format specific stats
+    if (key.includes('Streak')) {
+      return `${value} days`;
+    }
+    
+    return value.toLocaleString();
+  };
 
   return (
     <div id='achievements' className='py-16 lg:py-24'>

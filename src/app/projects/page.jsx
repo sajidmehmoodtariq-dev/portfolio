@@ -257,38 +257,6 @@ const ProjectsPage = () => {
           </p>
         </motion.div>
 
-        {/* GitHub Stats */}
-        {!loading && githubStats && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl"
-          >
-            <Card className="p-6 text-center">
-              <div className="text-3xl mb-2">📊</div>
-              <div className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">
-                {githubStats.totalRepos}
-              </div>
-              <div className="text-sm text-white/60">Total Repositories</div>
-            </Card>
-            <Card className="p-6 text-center">
-              <div className="text-3xl mb-2">⭐</div>
-              <div className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                {githubStats.totalStars}
-              </div>
-              <div className="text-sm text-white/60">Total Stars</div>
-            </Card>
-            <Card className="p-6 text-center">
-              <div className="text-3xl mb-2">🔧</div>
-              <div className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
-                {Array.isArray(githubStats.languages) ? githubStats.languages.length : 0}
-              </div>
-              <div className="text-sm text-white/60">Languages Used</div>
-            </Card>
-          </motion.div>
-        )}
-
         {/* Category Filters */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
